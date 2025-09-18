@@ -1,7 +1,7 @@
 internal class Program
 {
-    // Definición de la estructura tipopersona para almacenar datos de estudiantes
-    struct tipopersona
+    // definicion de la estructura tipopersona para almacenar datos de estudiantes
+    struct TipoPersona
     {
         public int edad;
         public string Nombre;
@@ -10,25 +10,32 @@ internal class Program
 
     static void Main(string[] args)
     {
-        tipopersona[] estudiante = new tipopersona[10]; // Arreglo para almacenar hasta 10 estudiantes
+        TipoPersona[] estudiante = new TipoPersona[10]; // arreglo para almacenar hasta 10 estudiantes
         int opcion;
-        int cantidadEstudiantes = 0; // Para llevar el conteo de estudiantes registrados
+        int cantidadEstudiantes = 0; // para llevar el conteo de estudiantes registrados
+
+        // variables auxiliares para intercambio
+        string aux1 = "";
+        int aux2 = 0;
+        float aux3 = 0;
 
         do
         {
-            // Menú principal
-            Console.WriteLine("----- MENÚ -----");
-            Console.WriteLine("1. Agregar estudiantes");
-            Console.WriteLine("2. Buscar estudiante");
-            Console.WriteLine("0. Salir");
-            Console.Write("Seleccione una opción: ");
+            // menu principal
+            Console.WriteLine("----- menu -----");
+            Console.WriteLine("1. agregar estudiantes");
+            Console.WriteLine("2. buscar estudiante");
+            Console.WriteLine("3. estudiante con mayor calificacion");
+            Console.WriteLine("4. listar todos los estudiantes");
+            Console.WriteLine("0. salir");
+            Console.Write("seleccione una opcion: ");
             opcion = int.Parse(Console.ReadLine());
 
             switch (opcion)
             {
                 case 1:
                     Console.WriteLine("cantidad de estudiantes");
-                    cantidadEstudiantes= int.Parse(Console.ReadLine());
+                    cantidadEstudiantes = int.Parse(Console.ReadLine());
                     for (int i = 0; i < cantidadEstudiantes; i++)
                     {
                         Console.WriteLine("nombre");
@@ -37,7 +44,8 @@ internal class Program
                         estudiante[i].edad = int.Parse(Console.ReadLine());
                         Console.WriteLine("calificacion");
                         estudiante[i].Calificacion = float.Parse(Console.ReadLine());
-                    }                    // Muestra los estudiantes registrados
+                    }
+                    // muestra los estudiantes registrados
                     for (int i = 0; i < cantidadEstudiantes; i++)
                     {
                         Console.WriteLine("el estudiante " + (i + 1) + " es " + estudiante[i].Nombre + " " + estudiante[i].edad + " " + estudiante[i].Calificacion);
@@ -45,20 +53,20 @@ internal class Program
                     }
                     break;
                 case 2:
-                    // Búsqueda de estudiante por nombre
-                    Console.Write("Ingrese el nombre del estudiante a buscar: ");
+                    // busqueda de estudiante por nombre
+                    Console.Write("ingrese el nombre del estudiante a buscar: ");
                     string nombreBuscar = Console.ReadLine();
                     bool encontrado = false;
                     for (int i = 0; i < cantidadEstudiantes; i++)
                     {
-                        // Compara el nombre ignorando mayúsculas/minúsculas
+                        // compara el nombre ignorando mayusculas/minusculas
                         if (estudiante[i].Nombre != null && estudiante[i].Nombre.Equals(nombreBuscar, StringComparison.OrdinalIgnoreCase))
                         {
                             Console.ForegroundColor = ConsoleColor.Cyan;
-                            Console.WriteLine("Estudiante encontrado:");
-                            Console.WriteLine("Nombre: " + estudiante[i].Nombre);
-                            Console.WriteLine("Edad: " + estudiante[i].edad);
-                            Console.WriteLine("Calificación: " + estudiante[i].Calificacion);
+                            Console.WriteLine("estudiante encontrado:");
+                            Console.WriteLine("nombre: " + estudiante[i].Nombre);
+                            Console.WriteLine("edad: " + estudiante[i].edad);
+                            Console.WriteLine("calificacion: " + estudiante[i].Calificacion);
                             encontrado = true;
                             Console.ResetColor();
                             break;
@@ -66,18 +74,92 @@ internal class Program
                     }
                     if (!encontrado)
                     {
-                        Console.WriteLine("Estudiante no encontrado.");
+                        Console.WriteLine("estudiante no encontrado.");
+                    }
+                    break;
+                case 3:
+                    // opcion para mostrar al estudiante con mas notas
+                    if (cantidadEstudiantes == 0)
+                    {
+                        Console.WriteLine("no hay estudiantes registrados.");
+                    }
+                    else
+                    {
+                        int mayornota = 0;
+                        for (int i = 1; i < cantidadEstudiantes; i++)
+                        {
+                            if (estudiante[i].Calificacion > estudiante[mayornota].Calificacion)
+                            {
+                                mayornota = i;
+                            }
+                            else if (estudiante[i].Calificacion == estudiante[mayornota].Calificacion)
+                            {
+                                // si hay empate, se muestran ambos
+                                Console.ForegroundColor = (ConsoleColor.Red + i);
+                                Console.WriteLine("hay un empate en la calificacion:");
+                                Console.WriteLine("nombre: " + estudiante[i].Nombre);
+                                Console.WriteLine("edad: " + estudiante[i].edad);
+                                Console.WriteLine("calificacion: " + estudiante[i].Calificacion);
+                                Console.ResetColor();
+                            }
+                        }
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("estudiante con mayor calificacion:");
+                        Console.WriteLine("nombre: " + estudiante[mayornota].Nombre);
+                        Console.WriteLine("edad: " + estudiante[mayornota].edad);
+                        Console.WriteLine("calificacion: " + estudiante[mayornota].Calificacion);
+                        Console.ResetColor();
+                    }
+                    break;
+                    case 4:
+                    // opcion para mostrar todos los estudiantes
+                    if (cantidadEstudiantes == 0)
+                    {
+                        Console.WriteLine("no hay estudiantes registrados.");
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.WriteLine("----- lista de estudiantes -----");
+                        for (int i = 0; i < cantidadEstudiantes; i++)
+                        {
+                            Console.WriteLine("nombre: " + estudiante[i].Nombre);
+                            Console.WriteLine("edad: " + estudiante[i].edad);
+                            Console.WriteLine("calificacion: " + estudiante[i].Calificacion);
+                            Console.WriteLine("-------------------------------");
+                        }
+                        Console.ResetColor();
                     }
                     break;
                 case 0:
-                    // Opción para salir del programa
-                    Console.WriteLine("Saliendo...");
+                    // opcion para salir del programa
+                    Console.WriteLine("saliendo...");
                     break;
                 default:
-                    // Opción inválida
-                    Console.WriteLine("Opción inválida.");
+                    // opcion invalida
+                    Console.WriteLine("opcion invalida.");
                     break;
             }
-        } while (opcion != 0); // Repite el menú hasta que el usuario decida salir
+            for (int i = 0; i < cantidadEstudiantes - 1; i++)
+            {
+                for (int j = i + 1; j < cantidadEstudiantes; j++)
+                {
+                    if (estudiante[i].Nombre.CompareTo(estudiante[j].Nombre) > 0)
+                    {
+                        aux1 = estudiante[i].Nombre;
+                        aux2 = estudiante[i].edad;
+                        aux3 = estudiante[i].Calificacion;
+                        estudiante[i].Nombre = estudiante[j].Nombre;
+                        estudiante[i].edad = estudiante[j].edad;
+                        estudiante[i].Calificacion = estudiante[j].Calificacion;
+                        estudiante[j].Nombre = aux1;
+                        estudiante[j].edad = aux2;
+                        estudiante[j].Calificacion = aux3;
+                    }
+                }
+            }
+        
+        } while (opcion != 0); // repite el menu hasta que el usuario decida salir
+
     }
 }
